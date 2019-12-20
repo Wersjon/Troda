@@ -67,10 +67,14 @@ int main()
         {
             if(game.map[i1][i2] == 'W')
             {
-                if(i1 > 0) {if(game.map[i1 - 1][i2] != 'W') game.map[i1 - 1][i2] = 'P';}
-                if(i1 < 99) {if(game.map[i1 + 1][i2] != 'W') game.map[i1 + 1][i2] = 'P';}
-                if(i2 > 0) {if(game.map[i1][i2 - 1] != 'W') game.map[i1][i2 - 1] = 'P';}
-                if(i2 < 99) {if(game.map[i1][i2 + 1] != 'W') game.map[i1][i2 + 1] = 'P';}
+                if(i1 > 0 && i2 > 0) if(game.map[i1 - 1][i2 - 1] != 'W') game.map[i1 - 1][i2 - 1] = 'P';
+                if(i1 > 0) if(game.map[i1 - 1][i2] != 'W') game.map[i1 - 1][i2] = 'P';
+                if(i2 > 0) if(game.map[i1][i2 - 1] != 'W') game.map[i1][i2 - 1] = 'P';
+                if(i1 > 0 && i2 < 99) if(game.map[i1 - 1][i2 + 1] != 'W') game.map[i1 - 1][i2 + 1] = 'P';
+                if(i1 < 99 && i2 > 0) if(game.map[i1 + 1][i2 - 1] != 'W') game.map[i1 + 1][i2 - 1] = 'P';
+                if(i1 < 99 && i2 < 99) if(game.map[i1 + 1][i2 + 1] != 'W') game.map[i1 + 1][i2 + 1] = 'P';
+                if(i1 < 99) if(game.map[i1 + 1][i2] != 'W') game.map[i1 + 1][i2] = 'P';
+                if(i2 < 99) if(game.map[i1][i2 + 1] != 'W') game.map[i1][i2 + 1] = 'P';
             }
             i2++;
         }
@@ -82,9 +86,9 @@ int main()
     {
         while(i2 < 100)
         {
-            if(game.map[i1][i2] != 'W')
+            if(game.map[i1][i2] != 'W' && game.map[i1][i2] != 'P')
             {
-                if(rand() % 5 == 1)game.map[i1][i2] = '#';
+                if(rand() % 3 == 1)game.map[i1][i2] = '#';
                 i2++;
             }
             i2++;
