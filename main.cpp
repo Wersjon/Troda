@@ -117,6 +117,7 @@ int main()
 
 void help()
 {    
+    game.walls('B', "floors/f", 7);
     game.walls('P', "floors/f", 6);
     game.walls('W', "floors/f", 1);
     game.walls('#', "walls/w", 9);
@@ -178,6 +179,13 @@ void help()
             Troda.setColor(0, 15);
             printf("%i & game.X: %i & game.Y: %i", game.direction, game.X, game.Y);
             Sleep(500);
+        }
+        else if(znak == 'B' || znak == 'b')
+        {
+            if(game.direction == 0 && game.map[game.X][game.Y - 1] == 'W') game.map[game.X][game.Y - 1] = 'B';
+            else if(game.direction == 1 && game.map[game.X + 1][game.Y] == 'W') game.map[game.X + 1][game.Y] = 'B';
+            else if(game.direction == 2 && game.map[game.X][game.Y + 1] == 'W') game.map[game.X][game.Y + 1] = 'B';
+            else if(game.direction == 3 && game.map[game.X - 1][game.Y] == 'W') game.map[game.X - 1][game.Y] = 'B';
         }
         Sleep(50);
     }
