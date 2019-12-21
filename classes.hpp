@@ -222,7 +222,6 @@ class mouser
         char helparea1 = area[i2][i1];
         char helparea2 = area2[i2][i1];
         string Display;
-
         while(i1 < 25) //Displays paiting on canvas
         {
             while(i2 < 80)
@@ -233,7 +232,7 @@ class mouser
                 }
                 else
                 {
-                    tp(i2 - howLong, i1);
+                    tp(i2 - howLong + 1, i1);
                     setColor(whatColor(helparea1), whatColor(helparea2));
                     for(int i = 1; i <= howLong; i++)
                     {
