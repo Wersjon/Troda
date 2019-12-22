@@ -121,10 +121,12 @@ void help()
     game.walls('P', "floors/f", 6);
     game.walls('W', "floors/f", 1);
     game.walls('#', "walls/w", 9);
+
     char znak;
     if(drawed == false)
     {
         Troda.draw();
+        game.generateMap();
         drawed = true;
     }
     if(kbhit())

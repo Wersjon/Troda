@@ -7,7 +7,6 @@
 #include <cstdlib>
 #include <ctime> 
 
-
 using namespace std;
 
 class mouser
@@ -332,5 +331,114 @@ class Engine
         if(map[X + isUp * isVertical][Y - isUp * !isVertical] == znak) Troda.getWallue(subname + "1r1", color);
         if(map[X - isUp * isVertical][Y + isUp * !isVertical] == znak) Troda.getWallue(subname + "1l1", color);
         if(map[X][Y] == znak) Troda.getWallue(subname + "1", color);
+    }
+    void generateMap()
+    {
+        char half = (char)220;
+        short i1 = -3, i2 = -4, charC, bgC;
+        while(i1 <= 7)
+        {
+            Troda.setColor(0, 15);
+            Troda.tp(67, 4 + (-4 + i1) / 2);
+            printf(" ");
+            Troda.tp(72 + 5, 4 + (-4 + i1) / 2);
+            printf(" ");
+            while(i2 <= 4)
+            {
+                if(i1 <= 1)
+                {
+                    switch(map[X + i2][Y + i1 - 2])
+                    {
+                        case 'W':
+                            bgC = 9;
+                        break;
+                        case 'P':
+                            bgC = 14;
+                        break;
+                        case '#':
+                            bgC = 8;
+                        break;
+                        case 'B':
+                            bgC = 7;
+                        break;
+                        default:
+                            bgC = 10;
+                        break;
+                    }
+                    switch(map[X + i2][Y + i1 - 1])
+                    {
+                        case 'W':
+                            charC = 9;
+                        break;
+                        case 'P':
+                            charC = 14;
+                        break;
+                        case '#':
+                            charC = 8;
+                        break;
+                        case 'B':
+                            charC = 7;
+                        break;
+                        default:
+                            charC = 10;
+                        break;
+                    }
+                }
+                if(i1 > 2)
+                {
+                    switch(map[X + i2][Y + i1 - 4])
+                    {
+                        case 'W':
+                            bgC = 9;
+                        break;
+                        case 'P':
+                            bgC = 14;
+                        break;
+                        case '#':
+                            bgC = 8;
+                        break;
+                        case 'B':
+                            bgC = 15;
+                        break;
+                        default:
+                            bgC = 10;
+                        break;
+                    }
+                    switch(map[X + i2][Y + i1 - 3])
+                    {
+                        case 'W':
+                            charC = 9;
+                        break;
+                        case 'P':
+                            charC = 14;
+                        break;
+                        case '#':
+                            charC = 8;
+                        break;
+                        case 'B':
+                            charC = 15;
+                        break;
+                        default:
+                            charC = 10;
+                        break;
+                    }
+                }
+                if(i1 == -3) bgC = 0;
+                else if(i1 == 7) charC = 0;
+                else if(i1 == 1 && i2 == 0) charC = 12;
+                Troda.setColor(bgC, charC);
+                Troda.tp(72 + i2, 4 + (-4 + i1) / 2);
+                printf("%c", half);
+                i2++;
+            }
+        i1++;
+        i1++;
+        i2 = -4;
+        }
+        Troda.setColor(0, 15);
+        Troda.tp(66, 3); printf("E");
+        Troda.tp(78, 3); printf("W");
+        Troda.tp(71, 0); printf(" N ");
+        Troda.tp(71, 6); printf(" S ");
     }
 }game;
