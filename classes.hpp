@@ -13,10 +13,8 @@ class mouser
 {
 
     private:
-    char area[80][25], area2[80][25], chars[80][25];
     HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
     HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-
     int whatColor(char x) //Says about color of "char x". Colors are stored in HEX value in .wdi files:
     {
         if(x == '1') return 1;
@@ -36,6 +34,10 @@ class mouser
         else if(x == 'F') return 15;
         else return 0;
     }
+
+    public:
+    char area[80][25], area2[80][25], chars[80][25];
+
     char whatChar(short x)
     {
         if(x == 1) return '1';
@@ -57,7 +59,6 @@ class mouser
         else return '0';
     }
 
-    public:
     void hideCursor() //Hides Cursor from user: (doesn't work if user resized window[?])
     {
         CONSOLE_CURSOR_INFO cursorInfo; //Sets variable called cursorInfo that contaisn cursors info
@@ -359,7 +360,7 @@ class Engine
                             bgC = 8;
                         break;
                         case 'B':
-                            bgC = 7;
+                            bgC = 15;
                         break;
                         default:
                             bgC = 10;
@@ -377,7 +378,7 @@ class Engine
                             charC = 8;
                         break;
                         case 'B':
-                            charC = 7;
+                            charC = 15;
                         break;
                         default:
                             charC = 10;
@@ -426,19 +427,15 @@ class Engine
                 if(i1 == -3) bgC = 0;
                 else if(i1 == 7) charC = 0;
                 else if(i1 == 1 && i2 == 0) charC = 12;
+                Troda.area[72 + i2][4 + (-4 + i1) / 2] = Troda.whatChar(bgC);
+                Troda.area2[72 + i2][4 + (-4 + i1) / 2] = Troda.whatChar(charC);
+                Troda.chars[72 + i2][4 + (-4 + i1) / 2] = half;
                 Troda.setColor(bgC, charC);
-                Troda.tp(72 + i2, 4 + (-4 + i1) / 2);
-                printf("%c", half);
                 i2++;
             }
         i1++;
         i1++;
         i2 = -4;
         }
-        Troda.setColor(0, 15);
-        Troda.tp(66, 3); printf("E");
-        Troda.tp(78, 3); printf("W");
-        Troda.tp(71, 0); printf(" N ");
-        Troda.tp(71, 6); printf(" S ");
     }
 }game;

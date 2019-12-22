@@ -125,8 +125,9 @@ void help()
     char znak;
     if(drawed == false)
     {
-        Troda.draw();
         game.generateMap();
+        Troda.getValue("map");
+        Troda.draw();
         drawed = true;
     }
     if(kbhit())
