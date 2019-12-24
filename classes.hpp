@@ -11,8 +11,8 @@ using namespace std;
 
 class mouser
 {
-
     private:
+
     HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
     HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
     int whatColor(char x) //Says about color of "char x". Colors are stored in HEX value in .wdi files:
@@ -34,8 +34,8 @@ class mouser
         else if(x == 'F') return 15;
         else return 0;
     }
-
     public:
+
     char area[80][25], area2[80][25], chars[80][25];
 
     char whatChar(short x)
@@ -125,8 +125,6 @@ class mouser
             openfile.close();
             return;
         }
-        openfile.close();
-        openfile.open("images/" + filename + ".wdi", ios::in);
         while(getline(openfile, holder)) //Opens file, and gets to every line value to holder
         {
             if(i1 < 26 && i1 > 0)
@@ -176,8 +174,6 @@ class mouser
             openfile.close();
             return;
         }
-        openfile.close();
-        openfile.open("images/" + filename + ".wdi", ios::in);
         while(getline(openfile, holder)) //Opens file, and gets to every line value to holder
         {
             if(i1 < 26 && i1 > 0)
@@ -270,10 +266,31 @@ class Engine
 {
     private:
 
+    short days = 0, hours = 5, minutes = 0, seconds = 0, before = 1;
+
+    char returnchar(short nmb)
+    {
+        switch(nmb)
+        {
+            case 0: return '0'; break;
+            case 1: return '1'; break;
+            case 2: return '2'; break;
+            case 3: return '3'; break;
+            case 4: return '4'; break;
+            case 5: return '5'; break;
+            case 6: return '6'; break;
+            case 7: return '7'; break;
+            case 8: return '8'; break;
+            case 9: return '9'; break;
+            default: return 'F'; break;
+        }
+    }
     public:
-        short direction;
-        short Y = 50, X = 50;
-        char map[100][100];
+    
+    short direction;
+    short Y = 250, X = 250;
+    char map[500][500];
+    bool drawed = false;
 
     void walls(char znak, string subname, short color)
     {
@@ -333,10 +350,12 @@ class Engine
         if(map[X - isUp * isVertical][Y + isUp * !isVertical] == znak) Troda.getWallue(subname + "1l1", color);
         if(map[X][Y] == znak) Troda.getWallue(subname + "1", color);
     }
+
     void generateMap()
     {
         char half = (char)220;
         short i1 = -3, i2 = -4, charC, bgC;
+
         while(i1 <= 7)
         {
             Troda.setColor(0, 15);
@@ -437,5 +456,263 @@ class Engine
         i1++;
         i2 = -4;
         }
+    }
+    void setWeather()
+    {
+        if(hours > 19 || hours < 4) Troda.getValue("dan/night");
+        else if(hours >= 4 && hours <= 5) Troda.getValue("dan/neither");
+        else if(hours >= 6 && hours <= 7) Troda.getValue("dan/either");
+        else if(hours >= 8 && hours <= 15) Troda.getValue("dan/day");
+        else if(hours >= 16 && hours <= 17) Troda.getValue("dan/either");
+        else if(hours >= 18 && hours <= 19) Troda.getValue("dan/neither");
+
+        switch(direction)
+        {
+            case 0:
+                switch(hours)
+                {
+                    case 0:
+                    case 1:
+                        Troda.getValue("dan/moons/moon4c");
+                    break;
+                    case 2:
+                    case 3:
+                        Troda.getValue("dan/moons/moon3l");
+                    break;
+                    case 4:
+                    case 5:
+                        Troda.getValue("dan/moons/moon2l");
+                    break;
+                    case 6:
+                    case 7:
+                        Troda.getValue("dan/moons/moon1l");
+                        Troda.getValue("dan/suns/sun1r");
+                    break;
+                    case 8:
+                    case 9:
+                        Troda.getValue("dan/suns/sun2r");
+                    break;
+                    case 10:
+                    case 11:
+                        Troda.getValue("dan/suns/sun3r");
+                    break;
+                    case 12:
+                    case 13:
+                        Troda.getValue("dan/suns/sun4c");
+                    break;
+                    case 14:
+                    case 15:
+                        Troda.getValue("dan/suns/sun3l");
+                    break;
+                    case 16:
+                    case 17:
+                        Troda.getValue("dan/suns/sun2l");
+                    break;
+                    case 18:
+                    case 19:
+                        Troda.getValue("dan/suns/sun1l");
+                        Troda.getValue("dan/moons/moon1r");
+                    break;
+                    case 20:
+                    case 21:
+                        Troda.getValue("dan/moons/moon2r");
+                    break;
+                    case 22:
+                    case 23:
+                        Troda.getValue("dan/moons/moon3r");
+                    break;
+                }
+            break;
+            case 1:
+                switch(hours)
+                {
+                    case 0:
+                    case 1:
+                        Troda.getValue("dan/moons/moon4c");
+                    break;
+                    case 6:
+                    case 7:
+                        Troda.getValue("dan/suns/sun1c");
+                    break;
+                    case 8:
+                    case 9:
+                        Troda.getValue("dan/suns/sun2c");
+                    break;
+                    case 10:
+                    case 11:
+                        Troda.getValue("dan/suns/sun3c");
+                    break;
+                    case 12:
+                    case 13:
+                        Troda.getValue("dan/suns/sun4c");
+                    break;
+                    case 18:
+                    case 19:
+                        Troda.getValue("dan/moons/moon1c");
+                    break;
+                    case 20:
+                    case 21:
+                        Troda.getValue("dan/moons/moon2c");
+                    break;
+                    case 22:
+                    case 23:
+                        Troda.getValue("dan/moons/moon3c");
+                    break;
+                }
+            break;
+            case 2:
+                switch(hours)
+                {
+                    case 0:
+                    case 1:
+                        Troda.getValue("dan/moons/moon4c");
+                    break;
+                    case 2:
+                    case 3:
+                        Troda.getValue("dan/moons/moon3r");
+                    break;
+                    case 4:
+                    case 5:
+                        Troda.getValue("dan/moons/moon2r");
+                    break;
+                    case 6:
+                    case 7:
+                        Troda.getValue("dan/moons/moon1r");
+                        Troda.getValue("dan/suns/sun1l");
+                    break;
+                    case 8:
+                    case 9:
+                        Troda.getValue("dan/suns/sun2l");
+                    break;
+                    case 10:
+                    case 11:
+                        Troda.getValue("dan/suns/sun3l");
+                    break;
+                    case 12:
+                    case 13:
+                        Troda.getValue("dan/suns/sun4c");
+                    break;
+                    case 14:
+                    case 15:
+                        Troda.getValue("dan/suns/sun3r");
+                    break;
+                    case 16:
+                    case 17:
+                        Troda.getValue("dan/suns/sun2r");
+                    break;
+                    case 18:
+                    case 19:
+                        Troda.getValue("dan/suns/sun1r");
+                        Troda.getValue("dan/moons/moon1l");
+                    break;
+                    case 20:
+                    case 21:
+                        Troda.getValue("dan/moons/moon2l");
+                    break;
+                    case 22:
+                    case 23:
+                        Troda.getValue("dan/moons/moon3l");
+                    break;
+                }
+            break;
+            case 3:
+                switch(hours)
+                {
+                    case 0:
+                    case 1:
+                        Troda.getValue("dan/moons/moon4c");
+                    break;
+                    case 2:
+                    case 3:
+                        Troda.getValue("dan/moons/moon3c");
+                    break;
+                    case 4:
+                    case 5:
+                        Troda.getValue("dan/moons/moon2c");
+                    break;
+                    case 6:
+                    case 7:
+                        Troda.getValue("dan/moons/moon1c");
+                    break;
+                    case 12:
+                    case 13:
+                        Troda.getValue("dan/suns/sun4c");
+                    break;
+                    case 14:
+                    case 15:
+                        Troda.getValue("dan/suns/sun3c");
+                    break;
+                    case 16:
+                    case 17:
+                        Troda.getValue("dan/suns/sun2c");
+                    break;
+                    case 18:
+                    case 19:
+                        Troda.getValue("dan/suns/sun1c");
+                    break;
+                }
+            break;
+        }
+        if(hours % 2 == 0 && minutes == 0) drawed = false;
+    }
+
+    void onIteration()
+    {
+        seconds += 10;
+        if(seconds >= 60)
+        {
+            minutes++;
+            seconds = 0;
+        }
+        if(minutes >= 60) 
+        {
+            minutes = 0;
+            hours++;
+            if(hours >= 24)
+            {
+                hours = 0;
+                days++;
+            }
+        }
+        short firstHours = 0, secondHours = hours, firstMinutes = 0, secondMinutes = minutes;
+        while(secondHours >= 10)
+        {
+            secondHours -= 10;
+            firstHours++;
+        }
+        while(secondMinutes >= 10)
+        {
+            secondMinutes -= 10;
+            firstMinutes++;
+        }
+        Troda.setColor(2, 10);
+        Troda.tp(70, 7); printf("%c%c:%c%c", returnchar(firstHours), returnchar(secondHours), returnchar(firstMinutes), returnchar(secondMinutes));
+        Troda.area[70][7] = '2';
+        Troda.area[71][7] = '2';
+        Troda.area[73][7] = '2';
+        Troda.area[74][7] = '2';
+        Troda.area2[70][7] = 'A';
+        Troda.area2[71][7] = 'A';
+        Troda.area2[73][7] = 'A';
+        Troda.area2[74][7] = 'A';
+        Troda.chars[70][7] = returnchar(firstHours);
+        Troda.chars[71][7] = returnchar(secondHours);
+        Troda.chars[73][7] = returnchar(firstMinutes);
+        Troda.chars[74][7] = returnchar(secondMinutes);
+    }
+
+    void onEnd()
+    {
+        short i1 = 0, i2 = hours;
+
+        Troda.area2[72][0] = 'F'; //N
+        Troda.area2[78][3] = 'F'; //E
+        Troda.area2[66][3] = 'F'; //W
+        Troda.area2[72][6] = 'F'; //S
+        if(direction == 0) Troda.area2[72][0] = 'C'; //N
+        else if(direction == 1) Troda.area2[78][3] = 'C'; //E
+        else if(direction == 3) Troda.area2[66][3] = 'C'; //W
+        else if(direction == 2) Troda.area2[72][6] = 'C'; //S
+        onIteration();
     }
 }game;
