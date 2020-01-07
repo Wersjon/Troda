@@ -1,12 +1,79 @@
 #include "classes.hpp"
 
-using namespace std;
-
 void act();
 
 int main()
 {
-    short i1 = 0, i2 = 0;
+    SetConsoleCP(852);
+
+    printf("loading...");
+
+    std::fstream openfile;
+    std::string holder;
+    int line = 0, i2 = 0, obraz = 0;
+
+    /* Wer-Dar Paint v-1.4* + wdd */
+    openfile.open("images/disk.wdd", std::ios::in); //opens .wdd file
+    if(openfile.good() == false) //if it doesn't exist, it displays "error 404"(file not found).
+    {
+        std::cout << "User Error #1 - disk.wdd not found";
+        openfile.close();
+        getch();
+        exit(0);
+    }
+    while(!openfile.eof())
+    {
+        getline(openfile, holder);
+        if(holder == "@") images.push_back(image());
+    }
+    
+    openfile.close();
+    
+    openfile.open("images/disk.wdd", std::ios::in); //opens .wdd file
+    while(!openfile.eof())
+    {  
+        getline(openfile, holder);
+        line++;
+        if(holder == "@") obraz++;
+
+        if(line % 80 == 2)
+        {
+            images[obraz].name = holder;
+        }
+        else if(line % 80 >= 4 && line % 80 <= 28)
+        {
+            i2 = 0;
+            while(i2 < 80)
+            {
+                images[obraz - 1].area[i2][line - (4 + (obraz - 1) * 80)] = holder[i2];
+                i2++;
+            }
+        }
+        else if(line % 80 >= 30 && line % 80 <= 54)
+        {
+            i2 = 0;
+            while(i2 < 80)
+            {
+                images[obraz - 1].area2[i2][line - (30 + (obraz - 1) * 80)] = holder[i2]; //Loads chars to area2, similiar to area, this one reads lower part of .wdi file
+                i2++;
+            }
+        }
+        else if(line % 80 >= 56 && line % 80 <= 79 || line % 80 == 0)
+        {
+            i2 = 0;
+            while(i2 < 80)
+            {
+                images[obraz - 1].chars[i2][line - (56 + (obraz - 1) * 80)] = holder[i2]; //Loads chars to chars[x][y]
+                i2++;
+            }
+        }
+    }
+    openfile.close();
+    
+    Troda.howmany = images.size() - 1;
+
+    short i1 = 0;
+    i2 = 0;
 
     srand(time(NULL));
 
@@ -130,6 +197,7 @@ void act()
         game.onEnd();
         Troda.draw();
         game.drawed = true;
+        game.onIteration();
     }
 
     if(kbhit())

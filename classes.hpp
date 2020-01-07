@@ -5,14 +5,26 @@
 #include <fstream>
 #include <string>
 #include <cstdlib>
-#include <ctime> 
+#include <ctime>
+#include <vector>
 
-using namespace std;
+class image
+{
+public:
+    char area[80][25], area2[80][25], chars[80][25];
+    std::string name;
+
+    image()
+    {
+        //
+    }
+};
+
+std::vector <image> images;
 
 class mouser
 {
-    private:
-
+private:
     HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
     HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
     int whatColor(char x) //Says about color of "char x". Colors are stored in HEX value in .wdi files:
@@ -34,8 +46,18 @@ class mouser
         else if(x == 'F') return 15;
         else return 0;
     }
-    public:
-
+    short getId(std::string originalName)
+    {
+        short i = 0;
+        while(i <= howmany)
+        {
+            if(images[i].name == originalName) return i;
+            i++;
+        }
+        return 0;
+    }
+public:
+    short howmany;
     char area[80][25], area2[80][25], chars[80][25];
 
     char whatChar(short x)
@@ -109,115 +131,59 @@ class mouser
         }
     }
 
-    void getValue(string filename)
+    void getValue(std::string filename)
     {
-        /*Wer-Dar Paint v-1.4*/
-        fstream openfile;
-        string holder;
-        short i1 = 0, i2 = 0;
-        char prev[80][25];
+        short i1 = 0, i2 = 0, picNum = getId(filename);
 
-        openfile.open("images/" + filename + ".wdi", ios::in); //opens .wdi file
-        if(openfile.good() == false) //if it doesn't exist, it displays "error 404"(file not found).
+        while(i1 < 25)
         {
-            tp(0, 0); setColor(0, 15);
-            cout << "error 404";
-            openfile.close();
-            return;
-        }
-        while(getline(openfile, holder)) //Opens file, and gets to every line value to holder
-        {
-            if(i1 < 26 && i1 > 0)
+            while(i2 < 80)
             {
-                while(i2 < 80)
+                if(images[picNum].area[i2][i1] != '#')
                 {
-                    prev[i2][i1 - 1] = holder[i2];
-                    if(holder[i2] != '#') area[i2][i1 - 1] = holder[i2];
-                    i2++;
+                    area[i2][i1] = images[picNum].area[i2][i1];
+                    area2[i2][i1] = images[picNum].area2[i2][i1];
+                    chars[i2][i1] = images[picNum].chars[i2][i1];
                 }
-            }
-            if(i1 > 27 && i1 < 53)
-            {
-                while(i2 < 80)
-                {
-                    if(prev[i2][i1 - 28] != '#') area2[i2][i1 - 28] = holder[i2]; //Loads chars to area2, similiar to area, this one reads lower part of .wdi file
-                    i2++;
-                }
-            }
-            if(i1 > 54 && i1 < 80)
-            {
-                while(i2 < 80)
-                {
-                    if(prev[i2][i1 - 55] != '#') chars[i2][i1 - 55] = holder[i2]; //Loads chars to chars[x][y]
-                    i2++;
-                }
+                i2++;
             }
             i2 = 0;
             i1++;
         }
-        openfile.close();
     }
 
-    void getWallue(string filename, short beColor)
+    void getWallue(std::string filename, short beColor)
     {
-        /*Wer-Dar Paint v-1.4 ~ modified*/
-        fstream openfile;
-        string holder;
-        short i1 = 0, i2 = 0;
-        char prev[80][25];
+        short i1 = 0, i2 = 0, picNum = getId(filename);
 
-        openfile.open("images/" + filename + ".wdi", ios::in); //opens .wdi file
-        if(openfile.good() == false) //if it doesn't exist, it displays "error 404"(file not found).
+        while(i1 < 25)
         {
-            tp(0, 0); setColor(0, 15);
-            cout << "error 404";
-            openfile.close();
-            return;
-        }
-        while(getline(openfile, holder)) //Opens file, and gets to every line value to holder
-        {
-            if(i1 < 26 && i1 > 0)
+            while(i2 < 80)
             {
-                while(i2 < 80)
+                if(images[picNum].area[i2][i1] != '#')
                 {
-                    prev[i2][i1 - 1] = holder[i2];
-                    if(holder[i2] != '#') area[i2][i1 - 1] = holder[i2];
-                    if(area[i2][i1 - 1] == '5') area[i2][i1 - 1] = whatChar(beColor);
-                    else if(area[i2][i1 - 1] == 'D') area[i2][i1 - 1] = whatChar(beColor + 8);
-                    i2++;
+                    area[i2][i1] = images[picNum].area[i2][i1];
+                    if(images[picNum].area2[i2][i1] == '5') area2[i2][i1] = whatChar(beColor);
+                    else if(images[picNum].area2[i2][i1] == 'D') area2[i2][i1] = whatChar(beColor + 8);
+                    else area2[i2][i1] = images[picNum].area2[i2][i1];
+
+                    chars[i2][i1] = images[picNum].chars[i2][i1];
                 }
-            }
-            if(i1 > 27 && i1 < 53)
-            {
-                while(i2 < 80)
-                {
-                    if(prev[i2][i1 - 28] != '#') area2[i2][i1 - 28] = holder[i2]; //Loads chars to area2, similiar to area, this one reads lower part of .wdi file
-                    if(area2[i2][i1 - 28] == '5') area2[i2][i1 - 28] = whatChar(beColor);
-                    else if(area2[i2][i1 - 28] == 'D') area2[i2][i1 - 28] = whatChar(beColor + 8);
-                    i2++;
-                }
-            }
-            if(i1 > 54 && i1 < 80)
-            {
-                while(i2 < 80)
-                {
-                    if(prev[i2][i1 - 55] != '#') chars[i2][i1 - 55] = holder[i2]; //Loads chars to chars[x][y]
-                    i2++;
-                }
+                if(images[picNum].area[i2][i1] == '5') area[i2][i1] = whatChar(beColor);
+                if(images[picNum].area[i2][i1] == 'D') area[i2][i1] = whatChar(beColor + 8);
+                i2++;
             }
             i2 = 0;
             i1++;
         }
-        openfile.close();
     }
-
     void draw()
     {
         short i1 = 0, i2 = 0, howLong = 1;
         char helper = chars[i2][i1];
         char helparea1 = area[i2][i1];
         char helparea2 = area2[i2][i1];
-        string Display;
+        std::string Display;
         while(i1 < 25) //Displays paiting on canvas
         {
             while(i2 < 80)
@@ -235,7 +201,7 @@ class mouser
                         Display += helper;
                         //if(area[i2 - 1][i1] != '#') printf("%c", helper);
                     }
-                    cout << Display;
+                    std::cout << Display;
                     howLong = 1;
                     if(i2 == 79)
                     {
@@ -264,8 +230,7 @@ class mouser
 
 class Engine
 {
-    private:
-
+private:
     short days = 0, hours = 5, minutes = 0, seconds = 0, before = 1;
 
     char returnchar(short nmb)
@@ -285,14 +250,14 @@ class Engine
             default: return 'F'; break;
         }
     }
-    public:
-    
+
+public:
     short direction;
     short Y = 250, X = 250;
     char map[500][500];
     bool drawed = false;
 
-    void walls(char znak, string subname, short color)
+    void walls(char znak, std::string subname, short color)
     {
         short isUp;
         bool isVertical;
@@ -473,7 +438,7 @@ class Engine
                 {
                     case 0:
                     case 1:
-                        Troda.getValue("dan/moons/moon4c");
+                        Troda.getValue("dan/moons/moon4");
                     break;
                     case 2:
                     case 3:
@@ -498,7 +463,7 @@ class Engine
                     break;
                     case 12:
                     case 13:
-                        Troda.getValue("dan/suns/sun4c");
+                        Troda.getValue("dan/suns/sun4");
                     break;
                     case 14:
                     case 15:
@@ -528,35 +493,35 @@ class Engine
                 {
                     case 0:
                     case 1:
-                        Troda.getValue("dan/moons/moon4c");
+                        Troda.getValue("dan/moons/moon4");
                     break;
                     case 6:
                     case 7:
-                        Troda.getValue("dan/suns/sun1c");
+                        Troda.getValue("dan/suns/sun1");
                     break;
                     case 8:
                     case 9:
-                        Troda.getValue("dan/suns/sun2c");
+                        Troda.getValue("dan/suns/sun2");
                     break;
                     case 10:
                     case 11:
-                        Troda.getValue("dan/suns/sun3c");
+                        Troda.getValue("dan/suns/sun3");
                     break;
                     case 12:
                     case 13:
-                        Troda.getValue("dan/suns/sun4c");
+                        Troda.getValue("dan/suns/sun4");
                     break;
                     case 18:
                     case 19:
-                        Troda.getValue("dan/moons/moon1c");
+                        Troda.getValue("dan/moons/moon1");
                     break;
                     case 20:
                     case 21:
-                        Troda.getValue("dan/moons/moon2c");
+                        Troda.getValue("dan/moons/moon2");
                     break;
                     case 22:
                     case 23:
-                        Troda.getValue("dan/moons/moon3c");
+                        Troda.getValue("dan/moons/moon3");
                     break;
                 }
             break;
@@ -565,7 +530,7 @@ class Engine
                 {
                     case 0:
                     case 1:
-                        Troda.getValue("dan/moons/moon4c");
+                        Troda.getValue("dan/moons/moon4");
                     break;
                     case 2:
                     case 3:
@@ -590,7 +555,7 @@ class Engine
                     break;
                     case 12:
                     case 13:
-                        Troda.getValue("dan/suns/sun4c");
+                        Troda.getValue("dan/suns/sun4");
                     break;
                     case 14:
                     case 15:
@@ -620,35 +585,35 @@ class Engine
                 {
                     case 0:
                     case 1:
-                        Troda.getValue("dan/moons/moon4c");
+                        Troda.getValue("dan/moons/moon4");
                     break;
                     case 2:
                     case 3:
-                        Troda.getValue("dan/moons/moon3c");
+                        Troda.getValue("dan/moons/moon3");
                     break;
                     case 4:
                     case 5:
-                        Troda.getValue("dan/moons/moon2c");
+                        Troda.getValue("dan/moons/moon2");
                     break;
                     case 6:
                     case 7:
-                        Troda.getValue("dan/moons/moon1c");
+                        Troda.getValue("dan/moons/moon1");
                     break;
                     case 12:
                     case 13:
-                        Troda.getValue("dan/suns/sun4c");
+                        Troda.getValue("dan/suns/sun4");
                     break;
                     case 14:
                     case 15:
-                        Troda.getValue("dan/suns/sun3c");
+                        Troda.getValue("dan/suns/sun3");
                     break;
                     case 16:
                     case 17:
-                        Troda.getValue("dan/suns/sun2c");
+                        Troda.getValue("dan/suns/sun2");
                     break;
                     case 18:
                     case 19:
-                        Troda.getValue("dan/suns/sun1c");
+                        Troda.getValue("dan/suns/sun1");
                     break;
                 }
             break;
@@ -687,18 +652,10 @@ class Engine
         }
         Troda.setColor(2, 10);
         Troda.tp(70, 7); printf("%c%c:%c%c", returnchar(firstHours), returnchar(secondHours), returnchar(firstMinutes), returnchar(secondMinutes));
-        Troda.area[70][7] = '2';
-        Troda.area[71][7] = '2';
-        Troda.area[73][7] = '2';
-        Troda.area[74][7] = '2';
-        Troda.area2[70][7] = 'A';
-        Troda.area2[71][7] = 'A';
-        Troda.area2[73][7] = 'A';
-        Troda.area2[74][7] = 'A';
-        Troda.chars[70][7] = returnchar(firstHours);
-        Troda.chars[71][7] = returnchar(secondHours);
-        Troda.chars[73][7] = returnchar(firstMinutes);
-        Troda.chars[74][7] = returnchar(secondMinutes);
+        Troda.area[70][7] = '2'; Troda.area2[70][7] = 'A'; Troda.chars[70][7] = returnchar(firstHours);
+        Troda.area[71][7] = '2'; Troda.area2[71][7] = 'A'; Troda.chars[71][7] = returnchar(secondHours);
+        Troda.area[73][7] = '2'; Troda.area2[73][7] = 'A'; Troda.chars[73][7] = returnchar(firstMinutes);
+        Troda.area[74][7] = '2'; Troda.area2[74][7] = 'A'; Troda.chars[74][7] = returnchar(secondMinutes);
     }
 
     void onEnd()
