@@ -254,6 +254,7 @@ private:
 public:
     short direction;
     short Y = 250, X = 250;
+    char biomes[500][500]; //0 - Water; A - Plains; B - Hills; C - Desert;
     char map[500][500];
     bool drawed = false;
 

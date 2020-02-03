@@ -79,11 +79,16 @@ int main()
 
     Troda.hideCursor();
     Troda.setColor(0, 15);
+
     while(i1 < 500)
     {
         while(i2 < 500)
         {
-            if(rand() % 10 == 1) game.map[i1][i2] = 'W';
+            game.biomes[i1][i2] = '0';
+            game.map[i1][i2] = 'W';
+            if(rand() % 20 == 1) game.biomes[i1][i2] = 'A';
+            if(rand() % 20 == 2) game.biomes[i1][i2] = 'B';
+            if(rand() % 20 == 3) game.biomes[i1][i2] = 'C';
             i2++;
         }
         i2 = 0;
@@ -94,12 +99,12 @@ int main()
     {
         while(i2 < 500)
         {
-            if(game.map[i1][i2] == 'W')
+            if(game.biomes[i1][i2] != '0')
             {
-                if(rand() % 2 == 1 && i1 > 0) game.map[i1 - 1][i2] = 'W';
-                if(rand() % 2 == 1 && i1 < 499) game.map[i1 + 1][i2] = 'W';
-                if(rand() % 2 == 1 && i2 > 0) game.map[i1][i2 - 1] = 'W';
-                if(rand() % 2 == 1 && i2 < 499) game.map[i1][i2 + 1] = 'W';
+                if(rand() % 2 == 1 && i1 > 0) game.biomes[i1 - 1][i2] = game.biomes[i1][i2];
+                if(rand() % 2 == 1 && i1 < 499) game.biomes[i1 + 1][i2] = game.biomes[i1][i2];
+                if(rand() % 2 == 1 && i2 > 0) game.biomes[i1][i2 - 1] = game.biomes[i1][i2];
+                if(rand() % 2 == 1 && i2 < 499) game.biomes[i1][i2 + 1] = game.biomes[i1][i2];
                 i2++;
             }
             i2++;
@@ -112,12 +117,12 @@ int main()
     {
         while(i2 < 500)
         {
-            if(game.map[i1][i2] == 'W')
+            if(game.biomes[i1][i2] != '0')
             {
-                if(rand() % 2 == 1 && i1 > 0) game.map[i1 - 1][i2] = 'W';
-                if(rand() % 2 == 1 && i1 < 499) game.map[i1 + 1][i2] = 'W';
-                if(rand() % 2 == 1 && i2 > 0) game.map[i1][i2 - 1] = 'W';
-                if(rand() % 2 == 1 && i2 < 499) game.map[i1][i2 + 1] = 'W';
+                if(rand() % 2 == 1 && i1 > 0) game.biomes[i1 - 1][i2] = game.biomes[i1][i2];
+                if(rand() % 2 == 1 && i1 < 499) game.biomes[i1 + 1][i2] = game.biomes[i1][i2];
+                if(rand() % 2 == 1 && i2 > 0) game.biomes[i1][i2 - 1] = game.biomes[i1][i2];
+                if(rand() % 2 == 1 && i2 < 499) game.biomes[i1][i2 + 1] = game.biomes[i1][i2];
                 i2++;
             }
             i2++;
@@ -130,16 +135,13 @@ int main()
     {
         while(i2 < 500)
         {
-            if(game.map[i1][i2] == 'W')
+            if(game.biomes[i1][i2] != '0')
             {
-                if(i1 > 0 && i2 > 0) if(game.map[i1 - 1][i2 - 1] != 'W') game.map[i1 - 1][i2 - 1] = 'P';
-                if(i1 > 0) if(game.map[i1 - 1][i2] != 'W') game.map[i1 - 1][i2] = 'P';
-                if(i2 > 0) if(game.map[i1][i2 - 1] != 'W') game.map[i1][i2 - 1] = 'P';
-                if(i1 > 0 && i2 < 499) if(game.map[i1 - 1][i2 + 1] != 'W') game.map[i1 - 1][i2 + 1] = 'P';
-                if(i1 < 499 && i2 > 0) if(game.map[i1 + 1][i2 - 1] != 'W') game.map[i1 + 1][i2 - 1] = 'P';
-                if(i1 < 499 && i2 < 499) if(game.map[i1 + 1][i2 + 1] != 'W') game.map[i1 + 1][i2 + 1] = 'P';
-                if(i1 < 499) if(game.map[i1 + 1][i2] != 'W') game.map[i1 + 1][i2] = 'P';
-                if(i2 < 499) if(game.map[i1][i2 + 1] != 'W') game.map[i1][i2 + 1] = 'P';
+                if(rand() % 2 == 1 && i1 > 0) game.biomes[i1 - 1][i2] = game.biomes[i1][i2];
+                if(rand() % 2 == 1 && i1 < 499) game.biomes[i1 + 1][i2] = game.biomes[i1][i2];
+                if(rand() % 2 == 1 && i2 > 0) game.biomes[i1][i2 - 1] = game.biomes[i1][i2];
+                if(rand() % 2 == 1 && i2 < 499) game.biomes[i1][i2 + 1] = game.biomes[i1][i2];
+                i2++;
             }
             i2++;
         }
@@ -151,9 +153,12 @@ int main()
     {
         while(i2 < 500)
         {
-            if(game.map[i1][i2] != 'W' && game.map[i1][i2] != 'P')
+            if(game.biomes[i1][i2] != '0')
             {
-                if(rand() % 3 == 1)game.map[i1][i2] = '#';
+                if(rand() % 2 == 1 && i1 > 0) game.biomes[i1 - 1][i2] = game.biomes[i1][i2];
+                if(rand() % 2 == 1 && i1 < 499) game.biomes[i1 + 1][i2] = game.biomes[i1][i2];
+                if(rand() % 2 == 1 && i2 > 0) game.biomes[i1][i2 - 1] = game.biomes[i1][i2];
+                if(rand() % 2 == 1 && i2 < 499) game.biomes[i1][i2 + 1] = game.biomes[i1][i2];
                 i2++;
             }
             i2++;
@@ -161,6 +166,35 @@ int main()
         i2 = 0;
         i1++;
     }
+    i1 = 0, i2 = 0;
+    while(i1 < 500)
+    {
+        while(i2 < 500)
+        {
+            if(game.biomes[i1][i2] == 'A')
+            {
+                game.map[i1][i2] = 'G';
+            }
+            if(game.biomes[i1][i2] == 'B')
+            {
+                if(rand() % 2 == 1) game.map[i1][i2] = 'G';
+                else game.map[i1][i2] = '#';
+            }
+            if(game.biomes[i1][i2] == 'C')
+            {
+                game.map[i1][i2] = 'P';
+            }
+            if(game.biomes[i1 - 1][i2] == '0' && game.map[i1][i2] != '#') game.map[i1][i2] = 'P';
+            if(game.biomes[i1 + 1][i2] == '0' && game.map[i1][i2] != '#') game.map[i1][i2] = 'P';
+            if(game.biomes[i1][i2 - 1] == '0' && game.map[i1][i2] != '#') game.map[i1][i2] = 'P';
+            if(game.biomes[i1][i2 + 1] == '0' && game.map[i1][i2] != '#') game.map[i1][i2] = 'P';
+
+            i2++;
+        }
+        i2 = 0;
+        i1++;
+    }
+    i1 = 0, i2 = 0;
     while(game.map[game.X][game.Y] == 'W' || game.map[game.X][game.Y] == '#')
     {
         if(game.X <= 260) game.X++;
@@ -188,10 +222,13 @@ void act()
 
     if(game.drawed == false)
     {
+        game.walls('G', "floors/f", 2);
         game.walls('B', "floors/f", 7);
         game.walls('P', "floors/f", 6);
         game.walls('W', "floors/f", 1);
+
         game.walls('#', "walls/w", 9);
+        
         game.generateMap();
         Troda.getValue("map");
         game.onEnd();
